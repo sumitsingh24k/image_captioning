@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Captioning Frontend</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Image Captioning</h1>
+      <p class="sub">Upload an image and generate a caption from the API.</p>
+
+      <label for="apiUrl">API URL</label>
+      <input id="apiUrl" type="text" value="http://127.0.0.1:8000/caption" />
+
+      <label for="mode">Mode</label>
+      <select id="mode">
+        <option value="auto">Auto (Custom -> BLIP)</option>
+        <option value="custom">Custom CNN+LSTM</option>
+        <option value="blip">BLIP fallback</option>
+      </select>
+
+      <label for="imageInput">Image</label>
+      <input id="imageInput" type="file" accept="image/*" />
+      <img id="preview" alt="Preview" />
+
+      <button id="generateBtn" type="button">Generate Caption</button>
+
+      <section class="result">
+        <h2>Caption</h2>
+        <p id="captionText">No caption yet.</p>
+      </section>
+    </main>
+    <script src="./main.js"></script>
+  </body>
+</html>

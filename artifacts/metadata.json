@@ -1,0 +1,11 @@
+{
+  "dataset_dir": "e:\\dl\\archive (1)",
+  "images_dir": "e:\\dl\\archive (1)\\Images",
+  "max_length": 39,
+  "vocab_size": 5000,
+  "max_vocab": 5000,
+  "num_unique_images": 8091,
+  "num_captions": 40455,
+  "train_images": 7281,
+  "val_images": 810
+}
