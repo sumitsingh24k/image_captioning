@@ -92,7 +92,7 @@ def main() -> None:
     parser.add_argument(
         "--artifacts_dir",
         type=str,
-        default=r"e:\dl\image_captioning\artifacts",
+        default="./artifacts",
         help="Directory containing cleaned_captions.csv, tokenizer.pkl, metadata.json, image_features.pkl",
     )
     parser.add_argument("--epochs", type=int, default=20, help="Training epochs.")
@@ -100,7 +100,7 @@ def main() -> None:
     parser.add_argument(
         "--checkpoints_dir",
         type=str,
-        default=r"e:\dl\image_captioning\checkpoints",
+        default="./checkpoints",
         help="Directory for saving trained models.",
     )
     args = parser.parse_args()

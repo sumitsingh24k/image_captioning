@@ -71,13 +71,13 @@ def main() -> None:
     parser.add_argument(
         "--dataset_dir",
         type=str,
-        default=r"e:\dl\archive (1)",
+        default="./dataset",
         help="Directory containing captions.txt and Images/.",
     )
     parser.add_argument(
         "--output_dir",
         type=str,
-        default=r"e:\dl\image_captioning\artifacts",
+        default="./artifacts",
         help="Directory to save tokenizer, metadata, and image features.",
     )
     parser.add_argument("--max_vocab", type=int, default=5000, help="Maximum vocabulary size.")

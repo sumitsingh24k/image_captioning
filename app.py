@@ -5,7 +5,7 @@ from PIL import Image
 from caption_service import CaptionService
 
 
-DEFAULT_PROJECT_DIR = Path(r"e:\dl\image_captioning")
+DEFAULT_PROJECT_DIR = Path(".")
 
 
 def main() -> None:

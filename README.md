@@ -31,89 +31,109 @@ e:\dl\image_captioning
     └── model.h5
 ```
 
-## 1) Install Dependencies
+## Quick Start (Clone & Run)
 
-```powershell
-cd "e:\dl\image_captioning"
-python -m venv .venv
-.venv\Scripts\Activate.ps1
+### 1) Clone & Setup Environment
+
+```bash
+git clone https://github.com/sumitsingh24k/image_captioning.git
+cd image_captioning
+python -m venv venv
+# On Windows:
+venv\Scripts\activate.ps1
+# On macOS/Linux:
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 2) Prepare Data + Extract Features
+### 2) Prepare Dataset
 
-```powershell
-python data_prep.py --dataset_dir "e:\dl\archive (1)" --output_dir "e:\dl\image_captioning\artifacts"
+You need a Flickr8k-style dataset with:
+- `captions.txt` (columns: image, caption)
+- `Images/` folder with images
+
+**Option A: Use Your Own Dataset**
+```bash
+python data_prep.py --dataset_dir /path/to/your/dataset --output_dir ./artifacts
 ```
 
-This will:
+**Option B: Download Sample Dataset**
+Visit [Flickr8k Dataset](https://github.com/jbrownlee/Datasets/releases/download/Flickr8k/Flickr8k_Dataset.zip) and extract, then run above command.
 
-- Clean captions and add `startseq` / `endseq`
-- Build tokenizer
-- Split images into train/val
-- Extract ResNet50 features for all images
+This generates:
+- `cleaned_captions.csv` - processed captions
+- `image_features.pkl` - ResNet50 features
+- `tokenizer.pkl` - vocabulary
 
-## 3) Train the Model
+### 3) Train the Model (Optional - Takes Hours)
 
-```powershell
-python train.py --artifacts_dir "e:\dl\image_captioning\artifacts" --checkpoints_dir "e:\dl\image_captioning\checkpoints" --epochs 20 --batch_size 128
+```bash
+python train.py --epochs 20 --batch_size 128
 ```
 
-Expected runtime on CPU can be long (hours).
+Model will be saved to `checkpoints/best_model.keras`
 
-## 4) Launch Web UI (Streamlit)
+## 4) Run the Application
 
-```powershell
+### Option A: Streamlit Web UI (Recommended)
+
+```bash
 streamlit run app.py
 ```
 
-In the app:
+Features:
+- **Custom Model**: Uses trained CNN+LSTM (if trained)
+- **BLIP Fallback**: Fast captions using pre-trained BLIP model
+- **Auto Mode**: Tries custom model, falls back to BLIP
 
-- Use **Custom CNN+LSTM** if you finished training.
-- Use **BLIP fallback** for immediate quality captions.
-- Use **Auto (Custom -> BLIP)** for best convenience.
+### Option B: FastAPI Backend + HTML Frontend
 
-## 5) Launch Backend API + Frontend
-
-Start API:
-
-```powershell
+Terminal 1 - Start Backend:
+```bash
 uvicorn backend_api:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Start frontend (new terminal):
-
-```powershell
-cd "e:\dl\image_captioning\frontend"
+Terminal 2 - Start Frontend (from `frontend/` folder):
+```bash
+cd frontend
 python -m http.server 5500
 ```
 
-Open:
+Open browser: `http://127.0.0.1:5500`
+- Upload image → Backend generates caption using `/caption` endpoint
 
-- `http://127.0.0.1:5500`
-- API endpoint is prefilled as `http://127.0.0.1:8000/caption`
+### Option C: React Frontend (Advanced UI)
 
-The frontend sends the uploaded image to FastAPI and displays the generated caption.
-
-## 6) React Frontend (Aesthetic UI)
-
-Start FastAPI backend first:
-
-```powershell
-cd "e:\dl\image_captioning"
-uvicorn backend_api:app --host 127.0.0.1 --port 8000 --reload
+Terminal 1 - Start Backend (same as Option B):
+```bash
+uvicorn backend_api:app --host 127.0.0.1 --port 8000
 ```
 
-Run the React app in a second terminal:
-
-```powershell
-cd "e:\dl\image_captioning\frontend-react"
+Terminal 2 - Start React Frontend:
+```bash
+cd frontend-react
 npm install
 npm run dev
 ```
 
-Open:
+Open browser: `http://127.0.0.1:5173`
 
-- `http://127.0.0.1:5173`
+---
 
-This React UI is already connected to `http://127.0.0.1:8000/caption` by default and supports all three modes: `auto`, `custom`, and `blip`.
+## Troubleshooting
+
+**❌ File Not Found Error**
+- Make sure you ran `data_prep.py` first
+- Dataset path must contain images and captions.txt
+
+**❌ CUDA/GPU Issues**
+- CPU works fine, just slower
+- TensorFlow/PyTorch will auto-detect GPU if available
+
+**❌ Missing dependencies**
+- Run: `pip install -r requirements.txt` again
+- Use `pip install --upgrade tensorflow torch`
+
+**❌ Large file push issues (already fixed!)**
+- Artifacts are in `.gitignore` - regenerated locally
+- Never commit: `.venv/`, `checkpoints/`, artifact files

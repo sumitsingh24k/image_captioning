@@ -8,7 +8,7 @@ from PIL import Image
 from caption_service import CaptionService
 
 
-PROJECT_DIR = Path(r"e:\dl\image_captioning")
+PROJECT_DIR = Path(".")
 service = CaptionService(PROJECT_DIR)
 
 app = FastAPI(title="Image Captioning API", version="1.0.0")
